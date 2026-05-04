@@ -2,13 +2,20 @@ name: Release MCPB
 
 # Packs the repo into a .mcpb (Anthropic MCP Bundle) and attaches it to a GitHub Release.
 #
-# First release on a new repo:
-# 1. GitHub → Releases → Draft a release → choose tag (e.g. v0.1.0) → Publish
-#    → this workflow runs and uploads the .mcpb to that release.
-# 2. Or: publish the release first, then Actions → "Release MCPB" → Run workflow,
-#    set "Upload to release tag" to the same tag (e.g. v0.1.0).
+# Why tag push ≠ automatic run before: GitHub emits `push` for `git push origin v1.2.3`, but
+# `release: published` only fires when a *Release* is published in the UI/API — not when a tag
+# appears. This workflow listens to both.
+#
+# Flows:
+# - `git push origin v0.1.0` → pack → create Release for that tag (if missing) and attach .mcpb,
+#   or upload if the Release already exists.
+# - Publish a Release in the UI → `release: published` → attach .mcpb to that tag.
+# - Actions → Run workflow → optional tag to upload; artifact always saved.
 
 on:
+  push:
+    tags:
+      - "v*"
   release:
     types: [published]
   workflow_dispatch:
@@ -49,6 +56,18 @@ jobs:
           name: mcpb-bundle
           path: dist/*.mcpb
           retention-days: 90
+
+      - name: Create or update release (version tag pushed)
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$MCPB_PATH" --clobber
+          else
+            gh release create "$TAG" --title "$TAG" --generate-notes "$MCPB_PATH"
+          fi
 
       - name: Attach to release (on Release published)
         if: github.event_name == 'release'
