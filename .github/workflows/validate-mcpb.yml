@@ -1,0 +1,25 @@
+# Validate manifest and ensure the bundle packs on pushes and pull requests.
+
+name: Validate MCPB
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate manifest
+        run: npx --yes @anthropic-ai/mcpb@latest validate .
+
+      - name: Pack (dry-run artifact)
+        run: npx --yes @anthropic-ai/mcpb@latest pack . nordstellar-remote-mcp-proxy-ci.mcpb

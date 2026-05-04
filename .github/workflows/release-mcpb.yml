@@ -1,0 +1,52 @@
+# Build and attach a Claude Desktop MCP Bundle (.mcpb) when a version tag is pushed (e.g. v0.1.0).
+# Manifest "version" is set to the tag without the leading v.
+# Also runs when you publish a GitHub Release that creates the tag — that pushes refs/tags/v*.
+
+name: Release MCPB
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Sync manifest version with tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION="${TAG#v}"
+          if [ -z "$VERSION" ] || [ "$VERSION" = "$TAG" ]; then
+            echo "Tag must look like v1.2.3 (got: $TAG)" >&2
+            exit 1
+          fi
+          tmp="$(mktemp)"
+          jq --arg v "$VERSION" '.version = $v' manifest.json > "$tmp"
+          mv "$tmp" manifest.json
+
+      - name: Validate and pack MCP bundle
+        run: |
+          set -euo pipefail
+          npx --yes @anthropic-ai/mcpb@latest validate .
+          npx --yes @anthropic-ai/mcpb@latest pack . "nordstellar-remote-mcp-proxy-${{ github.ref_name }}.mcpb"
+
+      - name: Upload .mcpb to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: "*.mcpb"
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

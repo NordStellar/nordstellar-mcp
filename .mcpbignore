@@ -1,0 +1,20 @@
+# Python / uv
+dist/
+*.whl
+*.tar.gz
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+.ruff_cache/
+
+# Git / CI (not needed inside bundle)
+.git/
+.github/
+
+# Dev artifacts
+.idea/
+.vscode/
+*.log

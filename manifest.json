@@ -1,0 +1,39 @@
+{
+  "manifest_version": "0.4",
+  "name": "nordstellar-remote-mcp-proxy",
+  "display_name": "NordStellar MCP",
+  "version": "0.1.0",
+  "description": "Connect your AI assistant to NordStellar with browser login; proxies MCP to NordStellar's remote server.",
+  "author": {
+    "name": "NordStellar"
+  },
+  "server": {
+    "type": "uv",
+    "entry_point": "nordstellar_remote_mcp_proxy.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "nordstellar_remote_mcp_proxy.py"],
+      "env": {
+        "NORDSTELLAR_REMOTE_MCP_URL": "${user_config.remote_mcp_url}"
+      }
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  },
+  "user_config": {
+    "remote_mcp_url": {
+      "type": "string",
+      "title": "Remote MCP URL",
+      "description": "NordStellar MCP endpoint (Streamable HTTP). Ask your account manager if unsure.",
+      "required": false,
+      "default": "https://platform-mcp.nordstellar.com/mcp"
+    }
+  },
+  "tools_generated": true,
+  "keywords": ["nordstellar", "mcp", "threat-intelligence"],
+  "license": "MIT"
+}
