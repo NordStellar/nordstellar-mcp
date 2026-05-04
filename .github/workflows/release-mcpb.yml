@@ -1,17 +1,5 @@
 name: Release MCPB
 
-# Packs the repo into a .mcpb (Anthropic MCP Bundle) and attaches it to a GitHub Release.
-#
-# Why tag push ≠ automatic run before: GitHub emits `push` for `git push origin v1.2.3`, but
-# `release: published` only fires when a *Release* is published in the UI/API — not when a tag
-# appears. This workflow listens to both.
-#
-# Flows:
-# - `git push origin v0.1.0` → pack → create Release for that tag (if missing) and attach .mcpb,
-#   or upload if the Release already exists.
-# - Publish a Release in the UI → `release: published` → attach .mcpb to that tag.
-# - Actions → Run workflow → optional tag to upload; artifact always saved.
-
 on:
   push:
     tags:
