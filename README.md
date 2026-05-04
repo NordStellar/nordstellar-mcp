@@ -16,7 +16,7 @@ Add the NordStellar MCP server to your AI assistant’s MCP configuration (e.g. 
 
 ```json
 {
-  "nordstellar-graphql": {
+  "nordstellar": {
     "command": "uvx",
     "args": [
       "--from", "git+https://github.com/NordStellar/nordstellar-mcp",
