@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nordstellar-remote-mcp-proxy"
-version = "0.1.0"
+version = "0.1.1"
 description = "Auth proxy that forwards MCP tool calls to a remote NordStellar MCP server"
 requires-python = ">=3.10"
 dependencies = [

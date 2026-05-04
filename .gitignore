@@ -16,3 +16,6 @@ build/
 # Linters
 .ruff_cache/
 .mypy_cache/
+
+# macOS
+.DS_Store
