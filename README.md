@@ -37,6 +37,22 @@ When you first use NordStellar, a browser window will open. Sign in with your No
 
 Ask your AI assistant things like “What projects do I have?” or “Show me recent activity” and it will use your NordStellar data to answer.
 
+### 4. Install agent skills (optional)
+
+You can install bundled skills the same way as other `npx skills add` workflows (for example the [Google Workspace CLI](https://github.com/googleworkspace/cli) repo):
+
+```bash
+# Install all skills at once
+npx skills add https://github.com/NordStellar/nordstellar-mcp
+
+# Or pick only what you need
+npx skills add https://github.com/NordStellar/nordstellar-mcp/tree/main/skills/nordstellar-general
+npx skills add https://github.com/NordStellar/nordstellar-mcp/tree/main/skills/attack-surface-management
+npx skills add https://github.com/NordStellar/nordstellar-mcp/tree/main/skills/dark-web-search
+npx skills add https://github.com/NordStellar/nordstellar-mcp/tree/main/skills/domain-squatting
+npx skills add https://github.com/NordStellar/nordstellar-mcp/tree/main/skills/malware-infection-analysis
+```
+
 ## Credential storage
 
 Session cookies are saved in your OS credential store under the service name `NordStellar MCP`:
