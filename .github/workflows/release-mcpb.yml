@@ -1,52 +1,65 @@
-# Build and attach a Claude Desktop MCP Bundle (.mcpb) when a version tag is pushed (e.g. v0.1.0).
-# Manifest "version" is set to the tag without the leading v.
-# Also runs when you publish a GitHub Release that creates the tag — that pushes refs/tags/v*.
-
 name: Release MCPB
 
+# Packs the repo into a .mcpb (Anthropic MCP Bundle) and attaches it to a GitHub Release.
+#
+# First release on a new repo:
+# 1. GitHub → Releases → Draft a release → choose tag (e.g. v0.1.0) → Publish
+#    → this workflow runs and uploads the .mcpb to that release.
+# 2. Or: publish the release first, then Actions → "Release MCPB" → Run workflow,
+#    set "Upload to release tag" to the same tag (e.g. v0.1.0).
+
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Upload .mcpb to this existing release tag (e.g. v0.1.0). Leave empty to only upload a workflow artifact."
+        required: false
+        default: ""
 
 permissions:
   contents: write
 
 jobs:
-  pack:
+  pack-and-upload:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
-      - name: Sync manifest version with tag
-        env:
-          TAG: ${{ github.ref_name }}
+      - name: Validate and pack
         run: |
           set -euo pipefail
-          VERSION="${TAG#v}"
-          if [ -z "$VERSION" ] || [ "$VERSION" = "$TAG" ]; then
-            echo "Tag must look like v1.2.3 (got: $TAG)" >&2
-            exit 1
-          fi
-          tmp="$(mktemp)"
-          jq --arg v "$VERSION" '.version = $v' manifest.json > "$tmp"
-          mv "$tmp" manifest.json
+          npx --yes @anthropic-ai/mcpb validate .
+          mkdir -p dist
+          NAME="$(node -p "require('./manifest.json').name")"
+          VER="$(node -p "require('./manifest.json').version")"
+          OUT="dist/${NAME}-${VER}.mcpb"
+          npx --yes @anthropic-ai/mcpb pack . "$OUT"
+          echo "MCPB_PATH=$OUT" >> "$GITHUB_ENV"
+          ls -la dist/
 
-      - name: Validate and pack MCP bundle
-        run: |
-          set -euo pipefail
-          npx --yes @anthropic-ai/mcpb@latest validate .
-          npx --yes @anthropic-ai/mcpb@latest pack . "nordstellar-remote-mcp-proxy-${{ github.ref_name }}.mcpb"
-
-      - name: Upload .mcpb to GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: ${{ github.ref_name }}
-          files: "*.mcpb"
-          generate_release_notes: true
+          name: mcpb-bundle
+          path: dist/*.mcpb
+          retention-days: 90
+
+      - name: Attach to release (on Release published)
+        if: github.event_name == 'release'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" "$MCPB_PATH" --clobber
+
+      - name: Attach to release (manual, tag provided)
+        if: github.event_name == 'workflow_dispatch' && inputs.release_tag != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ inputs.release_tag }}" "$MCPB_PATH" --clobber

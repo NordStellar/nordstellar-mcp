@@ -1,20 +1,19 @@
-# Python / uv
-dist/
-*.whl
-*.tar.gz
-.venv/
-__pycache__/
-*.pyc
-.pytest_cache/
-.mypy_cache/
-*.egg-info/
-.ruff_cache/
-
-# Git / CI (not needed inside bundle)
-.git/
+# Repo / CI (not needed inside the bundle)
 .github/
+scripts/
 
-# Dev artifacts
-.idea/
-.vscode/
-*.log
+# Skills ship separately (Claude Desktop ZIP / npx skills add)
+skills/
+
+# Python / local dev
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+.mypy_cache/
+
+# Build output from other tooling
+dist/
+
+# macOS
+.DS_Store
