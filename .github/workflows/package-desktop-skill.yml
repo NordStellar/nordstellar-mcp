@@ -1,0 +1,45 @@
+name: Package Claude Desktop Skill
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "scripts/package-desktop-skill.sh"
+      - ".github/workflows/package-desktop-skill.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build nordstellar.zip
+        run: bash scripts/package-desktop-skill.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nordstellar-desktop-skill
+          path: dist/nordstellar.zip
+          retention-days: 90
+
+      - name: Create or update release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: skills-latest
+          name: NordStellar Claude Desktop Skill
+          body: |
+            ## Install
+
+            1. Download `nordstellar.zip`
+            2. Open Claude Desktop → **Settings > Skills > + > Upload a skill**
+            3. Select the downloaded ZIP
+
+            Built automatically from the `skills/` directory on every push to `main`.
+          files: dist/nordstellar.zip
+          make_latest: false
