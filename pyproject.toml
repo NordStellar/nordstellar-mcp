@@ -19,3 +19,12 @@ nordstellar-remote-mcp-proxy = "nordstellar_remote_mcp_proxy:main"
 
 [tool.hatch.build]
 include = ["nordstellar_remote_mcp_proxy.py", "templates"]
+
+[tool.pip-licenses]
+ignore-packages = ["nordstellar-remote-mcp-proxy"]
+
+[tool.license-clause-check]
+# Split each license on ``;`` and `` OR ``; fail when any clause matches (substring match when partial-match is true).
+# Naive SPDX: does not interpret AND / WITH / parentheses.
+partial-match = true
+fail-on = "UNKNOWN;GNU Affero;Affero General Public;GNU General Public;GNU Lesser General;GNU Library General;European Union Public;Eclipse Public License;Common Development and Distribution;Open Software License;Microsoft Reciprocal License;Netscape Public License"

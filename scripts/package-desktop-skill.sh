@@ -10,10 +10,7 @@ set -euo pipefail
 #   nordstellar/
 #   ├── SKILL.md          (generated from nordstellar-general + reference links)
 #   └── references/
-#       ├── attack-surface-management.md
-#       ├── dark-web-search.md
-#       ├── domain-squatting.md
-#       └── malware-infection-analysis.md
+#       └── *.md          (one file per non-main skill, frontmatter stripped)
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SKILLS_DIR="$REPO_ROOT/skills"
@@ -21,19 +18,34 @@ DIST_DIR="$REPO_ROOT/dist"
 BUILD_DIR="$DIST_DIR/.build/nordstellar"
 
 MAIN_SKILL="nordstellar-general"
-REFERENCE_SKILLS=(
-  "attack-surface-management"
-  "dark-web-search"
-  "domain-squatting"
-  "malware-infection-analysis"
-)
 
-DESCRIPTION="NordStellar threat intelligence via MCP: leaked data, attack surface, dark web, domain squatting, and malware analysis."
+DESCRIPTION="NordStellar threat intelligence via MCP: leaked data, attack surface, dark web, domain squatting, malware analysis, compliance and audit workflows, and related investigations."
 
 strip_frontmatter() {
   # Remove YAML frontmatter (everything between the first two --- lines)
   awk 'BEGIN{fm=0} /^---$/{fm++; next} fm>=2{print}' "$1"
 }
+
+reference_title() {
+  # Prefer the first Markdown H1 in the body (after frontmatter).
+  local md="$1"
+  local slug="$2"
+  local t
+  t="$(strip_frontmatter "$md" | grep -m1 '^# ' | sed 's/^# //')"
+  if [[ -n "${t// /}" ]]; then
+    printf '%s' "$t"
+    return
+  fi
+  # Fallback: slug words → Title Case (portable; no bash 4 substring ops)
+  echo "$slug" | tr '-' ' ' | awk '{for(i=1;i<=NF;i++){$i=toupper(substr($i,1,1)) substr($i,2)} print}'
+}
+
+# All skill dirs except the main hub that contain SKILL.md (sorted).
+REFERENCE_SKILLS=()
+while IFS= read -r _dir; do
+  [[ -f "$_dir/SKILL.md" ]] || continue
+  REFERENCE_SKILLS+=("$(basename "$_dir")")
+done < <(find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "$MAIN_SKILL" | LC_ALL=C sort)
 
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR/references"
@@ -57,11 +69,12 @@ EOF
 
 For deeper coverage of each domain, Claude will load these automatically when relevant:
 
-- [Attack Surface Management](references/attack-surface-management.md) — scans, templates, facets, search filters, activity logs
-- [Dark Web Search](references/dark-web-search.md) — Lucene syntax, tag filtering, recursive investigation strategy
-- [Domain Squatting](references/domain-squatting.md) — permutation forensics, WHOIS, AI analysis, case workflow, events feed
-- [Malware Infection Analysis](references/malware-infection-analysis.md) — stealer log drill-down, cookie/session risk, reporting template
 EOF
+  for skill in "${REFERENCE_SKILLS[@]}"; do
+    md="$SKILLS_DIR/$skill/SKILL.md"
+    title="$(reference_title "$md" "$skill")"
+    printf -- '- [%s](references/%s.md)\n' "$title" "$skill"
+  done
 } > "$BUILD_DIR/SKILL.md"
 
 # --- Reference files (strip frontmatter from each) ---
