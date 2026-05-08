@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history not required; fetch tags so ``skills-latest`` can be updated safely.
+          fetch-depth: 0
 
       - name: Build nordstellar.zip
         run: bash scripts/package-desktop-skill.sh
@@ -43,3 +46,12 @@ jobs:
             Built automatically from the `skills/` directory on every push to `main`.
           files: dist/nordstellar.zip
           make_latest: false
+
+      # ``action-gh-release`` uploads assets but may leave the ``skills-latest`` tag on an old
+      # commit. Move the floating tag to the SHA that built this ZIP so the release page matches.
+      - name: Point skills-latest tag at this commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f skills-latest
+          git push origin "refs/tags/skills-latest" --force
