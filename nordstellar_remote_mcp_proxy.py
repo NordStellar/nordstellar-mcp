@@ -12,14 +12,14 @@ Usage:
 
   Or set NORDSTELLAR_REMOTE_MCP_URL (e.g. MCPB / Claude Desktop extensions).
 
-  uvx --from git+https://github.com/NordStellar/nordstellar-mcp \\
-      nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
+  uvx nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
+
+  Pin a release: uvx --from 'nordstellar-mcp==0.1.3' nordstellar-mcp https://...
 
 Cursor mcp.json:
-  "nordstellar-graphql": {
+  "nordstellar-mcp": {
     "command": "uvx",
     "args": [
-      "--from", "git+https://github.com/NordStellar/nordstellar-mcp",
       "nordstellar-mcp",
       "https://platform-mcp.nordstellar.com/mcp"
     ]

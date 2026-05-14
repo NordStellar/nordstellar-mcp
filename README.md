@@ -16,15 +16,22 @@ Add the NordStellar MCP server to your AI assistant’s MCP configuration (e.g. 
 
 ```json
 {
-  "nordstellar": {
+  "nordstellar-mcp": {
     "command": "uvx",
     "args": [
-      "--from", "git+https://github.com/NordStellar/nordstellar-mcp",
       "nordstellar-mcp",
       "https://platform-mcp.nordstellar.com/mcp"
     ]
   }
 }
+```
+
+`uvx` pulls the [`nordstellar-mcp`](https://pypi.org/project/nordstellar-mcp/) package from PyPI. To pin a version, use e.g. `"--from", "nordstellar-mcp==0.1.3"` before the tool name in `args`.
+
+To run the same from a shell:
+
+```bash
+uvx nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
 ```
 
 The default endpoint is `https://platform-mcp.nordstellar.com/mcp`. Contact your NordStellar administrator if you need a different URL.
