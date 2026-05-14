@@ -21,6 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event_name == 'workflow_dispatch' && inputs.release_tag != '' && inputs.release_tag || github.ref }}
 
       - uses: actions/setup-node@v4
         with:
@@ -34,8 +37,12 @@ jobs:
           NAME="$(node -p "require('./manifest.json').name")"
           VER="$(node -p "require('./manifest.json').version")"
           OUT="dist/${NAME}-${VER}.mcpb"
+          STABLE="dist/${NAME}.mcpb"
           npx --yes @anthropic-ai/mcpb pack . "$OUT"
+          cp "$OUT" "$STABLE"
           echo "MCPB_PATH=$OUT" >> "$GITHUB_ENV"
+          echo "MCPB_STABLE_PATH=$STABLE" >> "$GITHUB_ENV"
+          echo "MCPB_VERSION=$VER" >> "$GITHUB_ENV"
           ls -la dist/
 
       - name: Upload workflow artifact
@@ -52,9 +59,9 @@ jobs:
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$MCPB_PATH" --clobber
+            gh release upload "$TAG" "$MCPB_PATH" "$MCPB_STABLE_PATH" --clobber
           else
-            gh release create "$TAG" --title "$TAG" --generate-notes "$MCPB_PATH"
+            gh release create "$TAG" --title "$TAG" --generate-notes "$MCPB_PATH" "$MCPB_STABLE_PATH"
           fi
 
       - name: Attach to release (on Release published)
@@ -62,11 +69,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" "$MCPB_PATH" --clobber
+          gh release upload "${{ github.event.release.tag_name }}" "$MCPB_PATH" "$MCPB_STABLE_PATH" --clobber
 
       - name: Attach to release (manual, tag provided)
         if: github.event_name == 'workflow_dispatch' && inputs.release_tag != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ inputs.release_tag }}" "$MCPB_PATH" --clobber
+          gh release upload "${{ inputs.release_tag }}" "$MCPB_PATH" "$MCPB_STABLE_PATH" --clobber
+
+      # Stable URL for GitHub ``/releases/latest/download/nordstellar-mcp.mcpb`` (semver releases stay ``Latest``).
+      # Floating tag/release for a permalink under ``/releases/tag/mcpb-latest``.
+      - name: Update mcpb-latest floating release
+        if: ${{ success() && (github.event_name == 'push' && github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')) }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: mcpb-latest
+          name: NordStellar MCPB (latest)
+          body: |
+            Rolling **mcpb-latest** build; manifest version **${{ env.MCPB_VERSION }}**.
+
+            - **Stable asset name:** `nordstellar-mcp.mcpb`
+            - **Versioned release:** [`v${{ env.MCPB_VERSION }}`](https://github.com/${{ github.repository }}/releases/tag/v${{ env.MCPB_VERSION }})
+          files: ${{ env.MCPB_STABLE_PATH }}
+          make_latest: false
+
+      - name: Point mcpb-latest tag at this commit
+        if: ${{ success() && (github.event_name == 'push' && github.ref_type == 'tag' || github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')) }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f mcpb-latest
+          git push origin "refs/tags/mcpb-latest" --force
