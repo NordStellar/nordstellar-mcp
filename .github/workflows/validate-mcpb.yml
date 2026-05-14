@@ -22,4 +22,4 @@ jobs:
         run: npx --yes @anthropic-ai/mcpb@latest validate .
 
       - name: Pack (dry-run artifact)
-        run: npx --yes @anthropic-ai/mcpb@latest pack . nordstellar-remote-mcp-proxy-ci.mcpb
+        run: npx --yes @anthropic-ai/mcpb@latest pack . nordstellar-mcp-ci.mcpb

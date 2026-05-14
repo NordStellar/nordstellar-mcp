@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "nordstellar-remote-mcp-proxy"
-version = "0.1.1"
+name = "nordstellar-mcp"
+version = "0.1.2"
 description = "Auth proxy that forwards MCP tool calls to a remote NordStellar MCP server"
 requires-python = ">=3.10"
 dependencies = [
@@ -15,13 +15,13 @@ dependencies = [
 ]
 
 [project.scripts]
-nordstellar-remote-mcp-proxy = "nordstellar_remote_mcp_proxy:main"
+nordstellar-mcp = "nordstellar_remote_mcp_proxy:main"
 
 [tool.hatch.build]
 include = ["nordstellar_remote_mcp_proxy.py", "templates"]
 
 [tool.pip-licenses]
-ignore-packages = ["nordstellar-remote-mcp-proxy"]
+ignore-packages = ["nordstellar-mcp"]
 
 [tool.license-clause-check]
 # Split each license on ``;`` and `` OR ``; fail when any clause matches (substring match when partial-match is true).

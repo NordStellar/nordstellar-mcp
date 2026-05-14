@@ -7,20 +7,20 @@ using that JWT as a Bearer token.  Re-authenticates transparently when the
 token expires.
 
 Usage:
-  nordstellar-remote-mcp-proxy <remote_mcp_url>
-  nordstellar-remote-mcp-proxy --logout
+  nordstellar-mcp <remote_mcp_url>
+  nordstellar-mcp --logout
 
   Or set NORDSTELLAR_REMOTE_MCP_URL (e.g. MCPB / Claude Desktop extensions).
 
   uvx --from git+https://github.com/NordStellar/nordstellar-mcp \\
-      nordstellar-remote-mcp-proxy https://platform-mcp.nordstellar.com/mcp
+      nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
 
 Cursor mcp.json:
   "nordstellar-graphql": {
     "command": "uvx",
     "args": [
       "--from", "git+https://github.com/NordStellar/nordstellar-mcp",
-      "nordstellar-remote-mcp-proxy",
+      "nordstellar-mcp",
       "https://platform-mcp.nordstellar.com/mcp"
     ]
   }
@@ -87,7 +87,7 @@ log = logging.getLogger("nordstellar-proxy")
 
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="nordstellar-remote-mcp-proxy",
+        prog="nordstellar-mcp",
         description=(
             "Authenticate to NordStellar and proxy a local stdio MCP session "
             "to a remote StreamableHTTP MCP server."

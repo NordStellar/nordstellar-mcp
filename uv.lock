@@ -516,8 +516,8 @@ wheels = [
 ]
 
 [[package]]
-name = "nordstellar-remote-mcp-proxy"
-version = "0.1.1"
+name = "nordstellar-mcp"
+version = "0.1.2"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },

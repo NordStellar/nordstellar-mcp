@@ -20,7 +20,7 @@ Add the NordStellar MCP server to your AI assistant’s MCP configuration (e.g. 
     "command": "uvx",
     "args": [
       "--from", "git+https://github.com/NordStellar/nordstellar-mcp",
-      "nordstellar-remote-mcp-proxy",
+      "nordstellar-mcp",
       "https://platform-mcp.nordstellar.com/mcp"
     ]
   }
@@ -69,7 +69,7 @@ Any application running as your user account may be able to read stored credenti
 
 To remove stored session cookies, use one of the following:
 
-- Any platform: run `nordstellar-remote-mcp-proxy --logout`
+- Any platform: run `nordstellar-mcp --logout`
 - macOS: run `security delete-generic-password -s "NordStellar MCP"`
 - Windows: remove the Generic Credential named `NordStellar MCP` from Credential Manager
 - Linux: remove the `NordStellar MCP` secret from your Secret Service keyring (for example with Seahorse or KWallet Manager)
