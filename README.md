@@ -81,12 +81,6 @@ To remove stored session cookies, use one of the following:
 - Windows: remove the Generic Credential named `NordStellar MCP` from Credential Manager
 - Linux: remove the `NordStellar MCP` secret from your Secret Service keyring (for example with Seahorse or KWallet Manager)
 
-## Token lifetime and refresh behavior
-
-This proxy stores whatever authentication cookies the NordStellar backend sets and refreshes the session through `POST /auth/refresh-token` when it needs a fresh `AccessToken`.
-
-The repository does not define backend token lifetimes or refresh-token rotation policy. The `AccessToken` cookie payload includes an `expires_in` field, but the exact TTLs and whether refresh cookies rotate are backend-controlled and should be confirmed with NordStellar platform operators.
-
 ## Requirements
 
 - [uv](https://docs.astral.sh/uv/) installed (`curl -LsSf https://astral.sh/uv/install.sh | sh`)
@@ -101,6 +95,7 @@ The repository does not define backend token lifetimes or refresh-token rotation
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)
+- [License](LICENSE) (GNU General Public License v3.0 only)
 
 ## Need help?
 
