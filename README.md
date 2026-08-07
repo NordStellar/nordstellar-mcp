@@ -1,6 +1,6 @@
-# NordLayer Intelligence MCP
+# NordLayer Intelligence by NordStellar MCP
 
-Connect any MCP-compatible AI assistant to [NordLayer Intelligence](https://nordlayer.com/intelligence/) (by NordStellar) so you can detect external exposure, prioritize risks, and act — directly from chat.
+Connect any MCP-compatible AI assistant to [NordLayer Intelligence](https://nordlayer.com/intelligence/) via the NordStellar MCP so you can detect external exposure, prioritize risks, and act — directly from chat.
 
 NordLayer Intelligence gives you real-time visibility into your external attack surface and threat landscape: exposed assets, leaked credentials, brand impersonations, dark web mentions, and malware infections.
 
@@ -16,7 +16,7 @@ Ask your AI assistant about the same risk areas covered by [NordLayer Intelligen
 
 ## What you get
 
-- Natural-language access to your NordLayer Intelligence / NordStellar project data
+- Natural-language access to your NordLayer Intelligence data through NordStellar MCP
 - No need to switch to the UI or write GraphQL by hand
 - Secure login via your NordStellar account
 
