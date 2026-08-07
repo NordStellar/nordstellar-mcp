@@ -14,7 +14,7 @@ Usage:
 
   uvx nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
 
-  Pin a release: uvx --from 'nordstellar-mcp==0.1.3' nordstellar-mcp https://...
+  Pin a release: uvx --from 'nordstellar-mcp==0.1.5' nordstellar-mcp https://...
 
 Cursor mcp.json:
   "nordstellar-mcp": {

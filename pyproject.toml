@@ -4,16 +4,16 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nordstellar-mcp"
-version = "0.1.4"
+version = "0.1.5"
 description = "Auth proxy that forwards MCP tool calls to a remote NordStellar MCP server"
 readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
 dependencies = [
-  "mcp>=1.6.0",
-  "httpx>=0.27.0",
-  "jinja2>=3.1.0",
-  "keyring>=25.0.0",
+  "mcp>=1.6.0,<2",
+  "httpx>=0.27.0,<1",
+  "jinja2>=3.1.0,<4",
+  "keyring>=25.0.0,<26",
 ]
 
 [project.scripts]

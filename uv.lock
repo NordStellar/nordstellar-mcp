@@ -517,7 +517,7 @@ wheels = [
 
 [[package]]
 name = "nordstellar-mcp"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -528,10 +528,10 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "httpx", specifier = ">=0.27.0" },
-    { name = "jinja2", specifier = ">=3.1.0" },
-    { name = "keyring", specifier = ">=25.0.0" },
-    { name = "mcp", specifier = ">=1.6.0" },
+    { name = "httpx", specifier = ">=0.27.0,<1" },
+    { name = "jinja2", specifier = ">=3.1.0,<4" },
+    { name = "keyring", specifier = ">=25.0.0,<26" },
+    { name = "mcp", specifier = ">=1.6.0,<2" },
 ]
 
 [[package]]

@@ -26,7 +26,7 @@ Add the NordStellar MCP server to your AI assistant’s MCP configuration (e.g. 
 }
 ```
 
-`uvx` pulls the [`nordstellar-mcp`](https://pypi.org/project/nordstellar-mcp/) package from PyPI. To pin a version, use e.g. `"--from", "nordstellar-mcp==0.1.3"` before the tool name in `args`.
+`uvx` pulls the [`nordstellar-mcp`](https://pypi.org/project/nordstellar-mcp/) package from PyPI. To pin a version, use e.g. `"--from", "nordstellar-mcp==0.1.5"` before the tool name in `args`.
 
 To run the same from a shell:
 

@@ -2,7 +2,7 @@
   "manifest_version": "0.4",
   "name": "nordstellar-mcp",
   "display_name": "NordStellar MCP",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Connect your AI assistant to NordStellar with browser login; proxies MCP to NordStellar's remote server.",
   "author": {
     "name": "NordStellar"
