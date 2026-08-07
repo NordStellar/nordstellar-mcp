@@ -1,11 +1,23 @@
-# NordStellar MCP
+# NordLayer Intelligence MCP
 
-Connect any MCP-compatible AI assistant to NordStellar so you can query your platform data directly from chat.
+Connect any MCP-compatible AI assistant to [NordLayer Intelligence](https://nordlayer.com/intelligence/) (by NordStellar) so you can detect external exposure, prioritize risks, and act — directly from chat.
+
+NordLayer Intelligence gives you real-time visibility into your external attack surface and threat landscape: exposed assets, leaked credentials, brand impersonations, dark web mentions, and malware infections.
+
+## What you can detect
+
+Ask your AI assistant about the same risk areas covered by [NordLayer Intelligence](https://nordlayer.com/intelligence/):
+
+- **External vulnerabilities** — open ports, forgotten subdomains, exposed admin panels, public config files and backups, and other attack-surface findings
+- **Compromised identities** — stolen credentials, active session cookies, and autofill data that could enable account takeover
+- **Exposed sensitive data** — dark web and criminal-forum mentions of company files, customer records, and other sensitive information
+- **Brand impersonation** — fake domains, look-alike brand abuse, and related squatting activity
+- **Malware infections** — devices where information-stealing malware has captured company data
 
 ## What you get
 
-- Use natural language to ask about NordStellar data
-- No need to switch to the NordStellar UI or write GraphQL by hand
+- Natural-language access to your NordLayer Intelligence / NordStellar project data
+- No need to switch to the UI or write GraphQL by hand
 - Secure login via your NordStellar account
 
 ## Setup
@@ -42,7 +54,14 @@ When you first use NordStellar, a browser window will open. Sign in with your No
 
 ### 3. Start using it
 
-Ask your AI assistant things like “What projects do I have?” or “Show me recent activity” and it will use your NordStellar data to answer.
+Ask your AI assistant things like:
+
+- “What projects do I have?”
+- “Show me critical external vulnerabilities that are still unresolved”
+- “Are there leaked employee credentials for our domains?”
+- “Any dark web mentions of our company this month?”
+- “Which look-alike domains look like brand impersonation?”
+- “Do we have malware infections with active session cookies?”
 
 ### 4. Install agent skills (optional)
 
@@ -99,4 +118,5 @@ To remove stored session cookies, use one of the following:
 
 ## Need help?
 
-Contact your NordStellar administrator for the correct MCP endpoint URL and any access questions.
+- Product overview: [NordLayer Intelligence](https://nordlayer.com/intelligence/)
+- MCP endpoint / access: contact your NordStellar administrator
