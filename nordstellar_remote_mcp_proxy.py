@@ -14,7 +14,7 @@ Usage:
 
   uvx nordstellar-mcp https://platform-mcp.nordstellar.com/mcp
 
-  Pin a release: uvx --from 'nordstellar-mcp==0.1.5' nordstellar-mcp https://...
+  Pin a release: uvx --from 'nordstellar-mcp==0.1.6' nordstellar-mcp https://...
 
 Cursor mcp.json:
   "nordstellar-mcp": {
@@ -950,7 +950,7 @@ def _is_auth_exception(exc: BaseException) -> bool:
     """
     if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 401:
         return True
-    if isinstance(exc, McpError) and exc.message == "Session terminated":
+    if isinstance(exc, McpError) and exc.error.message == "Session terminated":
         return True
     if isinstance(exc, RuntimeError) and exc.args == ("AUTH_NOT_AUTHENTICATED",):
         return True
